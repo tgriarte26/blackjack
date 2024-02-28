@@ -46,7 +46,7 @@ public class Blackjack {
             }
             if (response.toLowerCase().equals("stand")){
                 turnOver = true;
-                //dealer's turn
+                //dealer's turns
             }
         }
 
