@@ -29,7 +29,6 @@ public class Blackjack {
 
     private void playerTurn() {
         boolean turnOver = false;
-
         while(!turnOver){
             int playerScore = 0;
             System.out.println("hit or stand?");
@@ -41,7 +40,6 @@ public class Blackjack {
                     var playerHand = player.get(i);
                     System.out.print(" "+ playerHand);
                 }
-                System.out.println();
                 System.out.println("You have ___ points");
             }
             if (response.toLowerCase().equals("stand")){
@@ -49,7 +47,18 @@ public class Blackjack {
                 //dealer's turns
             }
         }
+    }
 
+    private void dealerTurn(){
+        int dealerHandValue = 0;
+        System.out.println("Dealer's hand:\t" + dealer.get(0) + dealer.get(1));
+        for (int i = 2; i < dealer.size(); i++) {
+            var dealerHand = dealer.get(i);
+            System.out.print(" "+ dealerHand);
+        }
+        if(dealerHandValue < 17){
+            dealer.add(deck.getCard());
+        }
     }
 
     private void run() {
@@ -58,5 +67,6 @@ public class Blackjack {
         System.out.println("Dealer's hand:\t" + dealer.get(0) + " [?]");
         System.out.println("Player's hand:\t" + player.get(0) + " " + player.get(1));
         playerTurn();
+        dealerTurn();
     }
 }
