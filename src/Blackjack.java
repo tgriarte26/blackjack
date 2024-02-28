@@ -8,40 +8,55 @@ public class Blackjack {
 
     Scanner kb;
 
-    public Blackjack(){
+    public Blackjack() {
         deck = new Deck();
         player = new ArrayList<>();
         dealer = new ArrayList<>();
         kb = new Scanner(System.in);
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         Blackjack game = new Blackjack();
         game.run();
     }
 
-    private void dealCards(){
+    private void dealCards() {
         player.add(deck.getCard());
         dealer.add(deck.getCard());
         player.add(deck.getCard());
         dealer.add(deck.getCard());
     }
 
-    private void playerTurn(){
-    }
-    private void run() {
-        deck.shuffle();
-        dealCards();
-        System.out.println("Dealer's hand:\t"+dealer.get(0)+" [?]");
-        System.out.println("Player's hand:\t"+player.get(0)+" "+player.get(1));
-        System.out.println();
-        System.out.println("hit or stand?");
-        String response = kb.nextLine();
-        while(response.toLowerCase().equals("hit")){
-            player.add(deck.getCard());
-            for(int i = 2; i < player.size(); i++){
-                System.out.println(player.get(i));
+    private void playerTurn() {
+        boolean turnOver = false;
+
+        while(!turnOver){
+            int playerScore = 0;
+            System.out.println("hit or stand?");
+            String response = kb.nextLine();
+            if (response.toLowerCase().equals("hit")) {
+                player.add(deck.getCard());
+                System.out.print("Player's hand:\t" + player.get(0) + " " + player.get(1));
+                for (int i = 2; i < player.size(); i++) {
+                    var playerHand = player.get(i);
+                    System.out.print(" "+ playerHand);
+                }
+                System.out.println();
+                System.out.println("You have ___ points");
+            }
+            if (response.toLowerCase().equals("stand")){
+                turnOver = true;
+                //dealer's turn
             }
         }
 
+    }
+
+    private void run() {
+        deck.shuffle();
+        dealCards();
+        System.out.println("Dealer's hand:\t" + dealer.get(0) + " [?]");
+        System.out.println("Player's hand:\t" + player.get(0) + " " + player.get(1));
+        playerTurn();
     }
 }
