@@ -31,7 +31,7 @@ public class Blackjack {
         boolean turnOver = false;
         while(!turnOver){
             int playerScore = 0;
-            System.out.println("hit or stand?");
+            System.out.println("\n"+"hit or stand? ");
             String response = kb.nextLine();
             if (response.toLowerCase().equals("hit")) {
                 player.add(deck.getCard());
@@ -40,7 +40,6 @@ public class Blackjack {
                     var playerHand = player.get(i);
                     System.out.print(" "+ playerHand);
                 }
-                System.out.println("You have ___ points");
             }
             if (response.toLowerCase().equals("stand")){
                 turnOver = true;
