@@ -7,6 +7,11 @@ public class Blackjack {
     private ArrayList<Card> dealer;
 
     Scanner kb;
+    int playerBank = 1000;
+    int currentBet = 0;
+    int playerHandValue = 0;
+    int dealerHandValue = 0;
+    boolean gameOver = true;
 
     public Blackjack() {
         deck = new Deck();
@@ -21,16 +26,38 @@ public class Blackjack {
     }
 
     private void dealCards() {
+        deck.shuffle();
+
         player.add(deck.getCard());
         dealer.add(deck.getCard());
         player.add(deck.getCard());
         dealer.add(deck.getCard());
+
+        for(Card tempValue : player){
+            playerHandValue += tempValue.getValue();
+        }
+        for(Card tempValue : dealer){
+            dealerHandValue += tempValue.getValue();
+        }
+
+        if(playerHandValue == 21){
+            System.out.println("You win!");
+        }
+
+        if(dealerHandValue == 21){
+            System.out.println("You lost!");
+        }
+    }
+
+    private void placeBets(){
+        System.out.println("You may bet between $0 and $" + playerBank);
+        currentBet = kb.nextInt();
+        kb.nextLine();
     }
 
     private void playerTurn() {
         boolean turnOver = false;
         while(!turnOver){
-            int playerScore = 0;
             System.out.println("\n"+"hit or stand? ");
             String response = kb.nextLine();
             if (response.toLowerCase().equals("hit")) {
@@ -43,25 +70,28 @@ public class Blackjack {
             }
             if (response.toLowerCase().equals("stand")){
                 turnOver = true;
-                //dealer's turns
             }
         }
     }
 
     private void dealerTurn(){
-        int dealerHandValue = 0;
-        System.out.println("Dealer's hand:\t" + dealer.get(0) + dealer.get(1));
+        System.out.println("Dealer's hand:\t" + dealer.get(0) + " " + dealer.get(1));
         for (int i = 2; i < dealer.size(); i++) {
             var dealerHand = dealer.get(i);
             System.out.print(" "+ dealerHand);
         }
-        if(dealerHandValue < 17){
-            dealer.add(deck.getCard());
+    }
+
+    public boolean isGameOver(boolean state){
+        if(state) {
+            return true;
+        } else {
+            return false;
         }
     }
 
     private void run() {
-        deck.shuffle();
+        placeBets();
         dealCards();
         System.out.println("Dealer's hand:\t" + dealer.get(0) + " [?]");
         System.out.println("Player's hand:\t" + player.get(0) + " " + player.get(1));
