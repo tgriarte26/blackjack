@@ -39,14 +39,14 @@ public class Blackjack {
         for(Card tempValue : dealer){
             dealerHandValue += tempValue.getValue();
         }
+    }
 
-        if(playerHandValue == 21){
-            System.out.println("You win!");
+    private int calculateHandValue(ArrayList<Card> hand) {
+        int value = 0;
+        for (Card card : hand) {
+            value += card.getValue();
         }
-
-        if(dealerHandValue == 21){
-            System.out.println("You lost!");
-        }
+        return value;
     }
 
     private void placeBets(){
@@ -80,22 +80,34 @@ public class Blackjack {
             var dealerHand = dealer.get(i);
             System.out.print(" "+ dealerHand);
         }
-    }
-
-    public boolean isGameOver(boolean state){
-        if(state) {
-            return true;
+        showHand();
+        if(calculateHandValue(dealer) > 21){
+            System.out.println("Dealer busted! You win.");
+            playerBank += currentBet;
+        } else if (calculateHandValue(player) > calculateHandValue(dealer)){
+            System.out.println("You win.");
+            playerBank += currentBet;
+        } else if (calculateHandValue(player) < calculateHandValue(dealer)){
+            System.out.println("You lose");
+            playerBank -= currentBet;
         } else {
-            return false;
+            System.out.println("Push.");
         }
     }
 
-    private void run() {
-        placeBets();
-        dealCards();
+    private void showHand(){
         System.out.println("Dealer's hand:\t" + dealer.get(0) + " [?]");
         System.out.println("Player's hand:\t" + player.get(0) + " " + player.get(1));
-        playerTurn();
-        dealerTurn();
+    }
+
+    private void run() {
+        while (playerBank > 0){
+            placeBets();
+            dealCards();
+            playerTurn();
+            if (calculateHandValue(player) <= 21){
+                dealerTurn();
+            }
+        }
     }
 }
