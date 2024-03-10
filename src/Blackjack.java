@@ -60,20 +60,25 @@ public class Blackjack {
     }
 
     private void endGame() {
-        int playerValue = calculateHandValue(player);
-        int dealerValue = calculateHandValue(dealer);
+        playerHandValue = calculateHandValue(player);
+        dealerHandValue = calculateHandValue(dealer);
 
         System.out.println("Final scores:");
         System.out.println("Dealer's hand: " + dealerHandValue);
         System.out.println("Player's hand: " + playerHandValue);
 
-        if (playerValue > 21) {
+        if (playerHandValue > 21) {
             System.out.println("LOSER! You went over 21. You lose $" + currentBet);
             playerBank -= currentBet;
-        } else if (dealerValue > 21 || playerValue > dealerValue) {
+        } else if (playerHandValue == 21){
+            currentBet *= 1.5;
+            System.out.println("BLACKJACK! You won $" + currentBet);
+            playerBank += currentBet;
+        }
+        else if (dealerHandValue > 21 || playerHandValue > dealerHandValue) {
             System.out.println("WINNER! You win $" + currentBet);
             playerBank += currentBet;
-        } else if (dealerValue > playerValue) {
+        } else if (dealerHandValue > playerHandValue) {
             System.out.println("LOSER! Dealer wins. You lose $" + currentBet);
             playerBank -= currentBet;
         } else {
@@ -81,7 +86,7 @@ public class Blackjack {
             // No change to player's bankroll on a tie
         }
 
-        System.out.println("Bank: " + playerBank);
+        System.out.println("Bank: $" + playerBank);
     }
 
     private void playerTurn() {
@@ -96,8 +101,16 @@ public class Blackjack {
                     var playerHand = player.get(i);
                     System.out.print(" "+ playerHand);
                 }
-            }
-            if (response.toLowerCase().equals("stand")){
+                playerHandValue = calculateHandValue(player);
+                System.out.println("\n" + "(Value: " + playerHandValue + ")");
+                if(playerHandValue > 21) {
+                     System.out.println("BUSTED!");
+                     turnOver = true;
+                }
+                if(playerHandValue == 21) {
+                     System.out.println("BLACKJACK!");
+                }
+            } else if (response.toLowerCase().equals("stand")){
                 turnOver = true;
             }
         }
@@ -108,11 +121,10 @@ public class Blackjack {
             Card drawnCard = deck.getCard();
             dealer.add(drawnCard);
             System.out.println("Dealer draws a card: " + drawnCard);
+            dealerHandValue = calculateHandValue(dealer);
+            System.out.println("(Value: " + dealerHandValue + ")");
         }
-        for (int i = 1; i < dealer.size(); i++) {
-            var dealerHand = dealer.get(i);
-            System.out.print(" "+ dealerHand);
-        }
+
 
         System.out.println();
     }
@@ -123,7 +135,6 @@ public class Blackjack {
 
         for (Card card : hand) {
             int cardValue = card.getValue();
-
             if (cardValue >= 11 && cardValue <= 13) {
                 value += 10;
             } else if (cardValue == 14){
@@ -145,6 +156,7 @@ public class Blackjack {
 
 
     private void run() {
+        System.out.println("The Original Blackjack");
         while (playerBank > 0){
             placeBets();
             dealCards();
