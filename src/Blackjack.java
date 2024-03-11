@@ -11,7 +11,6 @@ public class Blackjack {
     int currentBet = 0;
     int playerHandValue = 0;
     int dealerHandValue = 0;
-    boolean gameOver = true;
 
     public Blackjack() {
         deck = new Deck();
@@ -42,20 +41,25 @@ public class Blackjack {
         player.add(deck.getCard());
         dealer.add(deck.getCard());
 
+        //hand values to zero
         resetHandValues();
 
         playerHandValue = calculateHandValue(player);
         dealerHandValue = calculateHandValue(dealer);
     }
     private void placeBets(){
-        System.out.println("You may bet between $10 and $" + playerBank);
+        //place bets
+        System.out.println("You may bet between $1 and $" + playerBank);
         do{
+            //user input
             currentBet = kb.nextInt();
             kb.nextLine();
-            if (currentBet < 10 || currentBet > playerBank) {
-                System.out.println("Invalid bet amount. Please bet between $10 and $" + playerBank);
+
+            //if bet is 0
+            if (currentBet < 1 || currentBet > playerBank) {
+                System.out.println("Invalid bet amount. Please bet between $1 and $" + playerBank);
             }
-        } while (currentBet < 10 || currentBet > playerBank);
+        } while (currentBet < 1 || currentBet > playerBank);
 
     }
 
@@ -63,10 +67,12 @@ public class Blackjack {
         playerHandValue = calculateHandValue(player);
         dealerHandValue = calculateHandValue(dealer);
 
+        //final scores
         System.out.println("Final scores:");
         System.out.println("Dealer's hand: " + dealerHandValue);
         System.out.println("Player's hand: " + playerHandValue);
 
+        // when player wins or loses
         if (playerHandValue > 21) {
             System.out.println("LOSER! You went over 21. You lose $" + currentBet);
             playerBank -= currentBet;
@@ -74,8 +80,7 @@ public class Blackjack {
             currentBet *= 1.5;
             System.out.println("BLACKJACK! You won $" + currentBet);
             playerBank += currentBet;
-        }
-        else if (dealerHandValue > 21 || playerHandValue > dealerHandValue) {
+        } else if (dealerHandValue > 21 || playerHandValue > dealerHandValue) {
             System.out.println("WINNER! You win $" + currentBet);
             playerBank += currentBet;
         } else if (dealerHandValue > playerHandValue) {
@@ -94,6 +99,8 @@ public class Blackjack {
         while(!turnOver){
             System.out.println("\n"+"hit or stand? ");
             String response = kb.nextLine();
+
+            //when player "hits"
             if (response.toLowerCase().equals("hit")) {
                 player.add(deck.getCard());
                 System.out.print("Player's hand:\t" + player.get(0) + " " + player.get(1));
@@ -109,7 +116,10 @@ public class Blackjack {
                 }
                 if(playerHandValue == 21) {
                      System.out.println("BLACKJACK!");
+                     turnOver = true;
                 }
+
+            //when player "stands"
             } else if (response.toLowerCase().equals("stand")){
                 turnOver = true;
             }
@@ -117,6 +127,8 @@ public class Blackjack {
     }
     private void dealerTurn(){
         System.out.println("Dealer's hand:\t" + dealer.get(0) + " " + dealer.get(1));
+
+        //if dealers hand value is less than 17
         while (calculateHandValue(dealer) < 17 && calculateHandValue(dealer) <= 21) {
             Card drawnCard = deck.getCard();
             dealer.add(drawnCard);
@@ -133,6 +145,7 @@ public class Blackjack {
         int value = 0;
         int numAces = 0;
 
+        //king,queen,king,ace values
         for (Card card : hand) {
             int cardValue = card.getValue();
             if (cardValue >= 11 && cardValue <= 13) {
@@ -145,7 +158,7 @@ public class Blackjack {
             }
         }
 
-        // Handle Aces
+        //handles aces
         while (value > 21 && numAces > 0) {
             value -= 10;
             numAces--;
