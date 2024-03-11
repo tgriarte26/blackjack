@@ -145,7 +145,7 @@ public class Blackjack {
         int value = 0;
         int numAces = 0;
 
-        //king,queen,king,ace values
+        //jack,queen,king,ace values
         for (Card card : hand) {
             int cardValue = card.getValue();
             if (cardValue >= 11 && cardValue <= 13) {
