@@ -100,7 +100,7 @@ public class Blackjack {
             System.out.println("\n"+"hit or stand? ");
             String response = kb.nextLine();
 
-            //when player "hits"
+            //when player wants to "hit"
             if (response.toLowerCase().equals("hit")) {
                 player.add(deck.getCard());
                 System.out.print("Player's hand:\t" + player.get(0) + " " + player.get(1));
@@ -119,7 +119,7 @@ public class Blackjack {
                      turnOver = true;
                 }
 
-            //when player "stands"
+            //when player wants to "stand"
             } else if (response.toLowerCase().equals("stand")){
                 turnOver = true;
             }
@@ -136,8 +136,6 @@ public class Blackjack {
             dealerHandValue = calculateHandValue(dealer);
             System.out.println("(Value: " + dealerHandValue + ")");
         }
-
-
         System.out.println();
     }
 
